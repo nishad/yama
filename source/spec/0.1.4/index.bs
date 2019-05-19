@@ -1,0 +1,433 @@
+<pre class='metadata'>
+Title: YAMA: Yet Another Metadata Application Profile
+Shortname: yama-spec
+Level: 1
+Status: FINDING
+Work Status: exploring
+URL: http://purl.org/yama/spec/latest
+Logo: yama-logo.svg
+No Editor: True
+!Version : 0.1.4
+Repository: nishad/yama
+Abstract: Yet Another Metadata Application Profile (YAMA) is a human-friendly integrated markup language for Metadata Application Profile creation, management and publishing.
+</pre>
+
+# YAMA Specification
+
+This document defines textual syntax and specifications for writing YAMA documents in a natural text form. YAMA  syntax is based on [YAML 1.2 specification](https://yaml.org/spec/1.2/spec.html). YAMA  is parsable with any YAML 1.2 parser, but processing capabilities of YAMA documents are limited to YAMA specific implementations.
+
+
+# Status of This Document
+
+This document is a part of the YAMA  documentation. This document defines textual syntax and specifications. This is a working draft.
+ 
+# Introduction
+
+## Philosophy of YAMA
+
+Yet Another  Metadata Application Profile (YAMA)  is not defined as a new standard of metadata application profiles;  but YAMA is  defined as an easy to use preprocessor to create standard metadata application profile formats.  YAMA intended to be  simple enough that it can be used by domain experts without extensive knowledge on metadata application profiles.   
+
+## Syntax Compatibility
+
+Instead of introducing its own syntax,  YAMA adapts popular YAML format to avoid  reinventing the wheel.  Being a well proven data serialization format, YAML is widely accepted and various implementations  are available for different programming languages. YAMA intended to  get benefited from YAML’s readability and human friendliness. As a superset of JSON, YAML is a comfortable choice to express complex structures in a  human readable yet machine friendly way.
+
+## Extendability
+
+ YAMA is extendable with custom elements and  structure.  The only restriction is custom elements cannot be from reserved element sets. This will help to extend the capabilities of  YAMA without  any large-scale implementation changes. 
+ Any such extension is possible within the scope of YAML  specification. 
+ 
+ There is also a user variables section which is a straightforward approach to add any user defined variables without  altering the structure of a YAMA  document. 
+ 
+  
+## Specification Versioning
+
+YAMA specifications adhere to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html), where are the MAJOR.MINOR stands for specification versions and PATCH for corrections and changes of the documentation, which doesn't break any implementations. 
+
+MAJOR version changes will affect the core specification, and MINOR version changes will be backward compatible and does not affect any previously implemented specifications.
+
+# Document Structure
+
+ A YAMA document should strictly follow  YAML  specifications.  document should start with a valid YAML  declaration and  YAMA version should be  mentioned before starting the structure of the document.  if a valid YAMA specification version is not declared, then the last available version is assumed to be used.
+ 
+<div class=example>
+
+```yaml
+%YAML 1.2
+---  
+YAMA : 1.0
+```
+
+</div>
+
+
+
+## Metadata of the Application Profile
+
+ Metadata section is intended to express basic information of the specific metadata application profile. generally administrative metadata of the MAP is expressed as a key value pair. Important property from this section is the version  and creator. This information is used in generating publishable formats and creating provenance  information as well as change-log  of the metadata application profile.
+ 
+ YAMA documents MUST be versioned. [Semantic versioning (SemVer)](https://semver.org/) is highly recommended optionally [calendar versioning (CalVer)](https://calver.org/) can be considered if it fits the requirements. With the proper version number, YAMA processors can automate various versioning related tasks as well as can generate publishable versioned output formats.
+ 
+<table class="def">
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Key</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Default</th>
+	<th style="text-align:left;">Description</th>
+	<th style="text-align:left;">Sample</th>
+	<th style="text-align:left;">Required</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">id</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">A unique ID for the Description Set</td>
+	<td style="text-align:left;">MyBookCaseDS</td>
+	<td style="text-align:left;">R</td>
+</tr>
+<tr>
+	<td style="text-align:left;">title</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">Title of the MAP</td>
+	<td style="text-align:left;">My Book Case</td>
+	<td style="text-align:left;">R</td>
+</tr>
+<tr>
+	<td style="text-align:left;">version</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">Version following semver.org Semantic Versioning</td>
+	<td style="text-align:left;">X.Y.Z or X.Y or X</td>
+	<td style="text-align:left;">R</td>
+</tr>
+<tr>
+	<td style="text-align:left;">date</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">Release date of AP. Any valid ISO&#8211;8601 string.</td>
+	<td style="text-align:left;">2018&#8211;12&#8211;29</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">subject</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">Subject or topic</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">creator</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Person, URL or more contact information, Free text</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Creator can be repeated if there are multiple creators</td>
+</tr>
+<tr>
+	<td style="text-align:left;">homepage</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">publisher</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">keyword</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">open</td>
+	<td style="text-align:left;">Boolean</td>
+	<td style="text-align:left;">true</td>
+	<td style="text-align:left;">Open or closed MAP, will be respected in Application Profile curation services.</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">license</td>
+	<td style="text-align:left;">Free Text</td>
+	<td style="text-align:left;">CC</td>
+	<td style="text-align:left;">License of the MAP</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">descriptions</td>
+	<td style="text-align:left;">Array</td>
+	<td style="text-align:left;">[a,b]</td>
+	<td style="text-align:left;">If given as a list, only those descriptions will be included, else all descriptions with this MAP-ID will be used</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+</tbody>
+</table>
+
+
+<div class=example>
+
+```yaml
+description_set :
+  ID                 :           # (R) A unique ID for the Description Set. eg : MyBookCaseDS.
+  title              :           # Name of the AP. eg : My Book Case Application Profile.
+  version            :           # Version following semver.org Semantic Versioning eg. X.Y.Z or X.Y or X.
+  date               :           # Release date of AP. Any valid ISO-8601 string.
+  subject            :           # Subject or topic.
+  creator            :           # Person, URL or more contact information. Can also be {name: Person, email: Email, org: Org}
+  open               : true      # Open or closed DSP, will be respected in Application Profile curation services. Default true.
+  license            :           # License of the DSP default CC ?
+  descriptions       : [a,b]     # If given as a list, only those descriptions will be included, else all descriptions with this DSP-ID will be used
+```
+
+</div>
+
+## Name Spaces
+
+Name spaces are key value pair of prefix and URI.  YAMA  follows XML specification for prefixes and URI. URI  should be as recommended in RFC3986 (https://tools.ietf.org/html/rfc3986).  during the document processing, YAMA can  generate Qnames  from this namespace key values.
+
+<div class=example>
+
+```yaml
+namespaces     : 
+  prefix_1           : uri_1
+  prefix_2           : uri_2  
+```
+
+</div>
+
+## Descriptions
+ Single resources are described under descriptions with a unique ID for each descriptions. Every unique descriptions ID can have multiple key value pairs to describe that resource. 
+ 
+<table class="def">
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Key</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Default</th>
+	<th style="text-align:left;">Description</th>
+	<th style="text-align:left;">Required</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">label</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">-</td>
+	<td style="text-align:left;">Label of the Element</td>
+	<td style="text-align:left;">R</td>
+</tr>
+<tr>
+	<td style="text-align:left;">name</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;">Value from label</td>
+	<td style="text-align:left;">Human Friendly Name</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">min</td>
+	<td style="text-align:left;">Intiger</td>
+	<td style="text-align:left;">0</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">max</td>
+	<td style="text-align:left;">Intiger</td>
+	<td style="text-align:left;">n</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">standalone</td>
+	<td style="text-align:left;">Boolean</td>
+	<td style="text-align:left;">true</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+
+<tr>
+	<td style="text-align:left;">description</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Short Description</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">long_description</td>
+	<td style="text-align:left;">Text</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Detailed Description</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">statements</td>
+	<td style="text-align:left;">Array</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">[a,b] Statements belongs to this description</td>
+	<td style="text-align:left;">R</td>
+</tr>
+</tbody>
+</table>
+
+<div class=example>
+
+```yaml
+descriptions   :
+  example_description_01:
+    label            :          # (R) Label of the Element
+    name             :          # Human Friendly Name
+    min              :          # 
+    max              :          # 
+    standalone       : true     # Default, true
+    X class            :          # 
+    X subclass         :          # 
+    description      :          # Short Description
+    long_description :          # Detailed Description
+    statements       : [a,b]    # 
+```
+
+</div>
+
+## Statements
+
+A statement is a single data element used to describe a resource that is defined as a description. The statement defines the possible values, and any other constraints.
+
+<div class=note>
+A description can have one more statements, but descriptions without any statements is not actionable.
+</div>
+
+<table class="def">
+<colgroup>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+<col style="text-align:left;"/>
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;">Key</th>
+	<th style="text-align:left;">Type</th>
+	<th style="text-align:left;">Default</th>
+	<th style="text-align:left;">Description</th>
+	<th style="text-align:left;">Required</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;">label</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">(R) Label of the Element</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">name</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Human Friendly Name</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">min</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">max</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">type</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">description</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Short Description</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">long_description</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">Detailed Description</td>
+	<td style="text-align:left;"></td>
+</tr>
+<tr>
+	<td style="text-align:left;">constraint</td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;"></td>
+	<td style="text-align:left;">x or [x,y] IDs of constraints</td>
+	<td style="text-align:left;"></td>
+</tr>
+</tbody>
+</table>
+
+<div class=example>
+
+```yaml
+statements     : 
+  example_statement_01 :
+    label            :          # (R) Label of the Element
+    name             :          # Human Friendly Name
+    min              :          # 
+    max              :          # 
+    type             :          # 
+    description      :          # Short Description
+    long_description :          # Detailed Description
+    constraint       : x or [x,y]   # IDs of constraints
+```
+
+</div>
+
+## License
+
+[Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)] (https://creativecommons.org/licenses/by-sa/4.0/)
