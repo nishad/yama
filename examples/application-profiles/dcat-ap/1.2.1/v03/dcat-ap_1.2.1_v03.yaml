@@ -1,0 +1,898 @@
+%YAML 1.2
+---
+#%YAMA 0.8
+meta:
+  id: dcat-ap
+  title: DCAT Application Profile for Data Portals in Europe
+  version: 1.2.1
+  date: '2019-05-28'
+  subject: Application profile for data portals in Europe (DCAT-AP)
+  description: The DCAT Application profile for data portals in Europe (DCAT-AP) is
+    a specification based on the Data Catalogue vocabulary (DCAT) for describing public
+    sector datasets in Europe. Its basic use case is to enable a cross-data portal
+    search for data sets and make public sector data better searchable across borders
+    and sectors. This can be achieved by the exchange of descriptions of data sets
+    among data portals.
+  license: ISA Open Metadata Licence v1.1
+  license-url: https://joinup.ec.europa.eu/licence/isa-open-metadata-licence-v11
+  creator: DCAT-AP Working Group
+  website: https://github.com/SEMICeu/DCAT-AP
+  logo: https://joinup.ec.europa.eu/sites/default/files/imagecache/community_logo/DCAT_application_profile_for_European_data_portals_logo_0.png
+
+
+#     _   __
+#    / | / /___ _____ ___  ___  _________  ____ _________  _____
+#   /  |/ / __ `/ __ `__ \/ _ \/ ___/ __ \/ __ `/ ___/ _ \/ ___/
+#  / /|  / /_/ / / / / / /  __(__  ) /_/ / /_/ / /__/  __(__  )
+# /_/ |_/\__,_/_/ /_/ /_/\___/____/ .___/\__,_/\___/\___/____/
+#                                /_/
+
+namespaces:
+  adms: http://www.w3.org/ns/adms#
+  dcat: http://www.w3.org/ns/dcat#
+  dct: http://purl.org/dc/terms/
+  foaf: http://xmlns.com/foaf/0.1/
+  owl: http://www.w3.org/2002/07/owl#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  schema: http://schema.org/
+  skos: http://www.w3.org/2004/02/skos/core#
+  spdx: http://spdx.org/rdf/terms#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  vcard: http://www.w3.org/2006/vcard/ns#
+
+
+#   ______                 __             _       __
+#  / ____/___  ____  _____/ /_____ ______(_)___  / /______
+# / /   / __ \/ __ \/ ___/ __/ __ `/ ___/ / __ \/ __/ ___/
+#/ /___/ /_/ / / / (__  ) /_/ /_/ / /  / / / / / /_(__  )
+#\____/\____/_/ /_/____/\__/\__,_/_/  /_/_/ /_/\__/____/
+#
+
+constraints:
+  voc_iana_media_types: &voc_iana_media_types
+    type: vocabulary
+    vocabulary_name: IANA Media Types
+    URI: http://www.iana.org/assignments/media-types/media-types.xhtml
+    notes: ''
+  voc_dataset_theme_vocabulary: &voc_dataset_theme_vocabulary
+    type: vocabulary
+    vocabulary_name: Dataset Theme Vocabulary
+    URI: http://publications.europa.eu/resource/dataset/data-theme
+    notes: The value to be used for this property is the URI of the vocabulary itself,
+      i.e. the concept scheme, not the URIs of the concepts in the vocabulary.
+  voc_eu_vocabularies_frequency_named_authority_list: &voc_eu_vocabularies_frequency_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Frequency Named Authority List
+    URI: http://publications.europa.eu/resource/authority/frequency
+    notes: ''
+  voc_eu_vocabularies_file_type_named_authority_list: &voc_eu_vocabularies_file_type_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies File Type Named Authority List
+    URI: http://publications.europa.eu/resource/authority/file-type
+    notes: ''
+  voc_eu_vocabularies_languages_named_authority_list: &voc_eu_vocabularies_languages_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Languages Named Authority List
+    URI: http://publications.europa.eu/resource/authority/language
+    notes: ''
+  voc_eu_vocabularies_corporate_bodies_named_authority_list: &voc_eu_vocabularies_corporate_bodies_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Corporate bodies Named Authority List
+    URI: http://publications.europa.eu/resource/authority/corporate-body
+    notes: The Corporate bodies NAL must be used for European institutions and a small
+      set of international organisations. In case of other types of organisations,
+      national, regional or local vocabularies should be used.
+  voc_geonames: &voc_geonames
+    type: vocabulary
+    vocabulary_name: Geonames
+    URI: http://sws.geonames.org/
+    notes: The EU Vocabularies Name Authority Lists must be used for continents, countries
+      and places that are in those lists; if a particular location is not in one of
+      the mentioned Named Authority Lists, Geonames URIsmust be used.
+  voc_eu_vocabularies_places_named_authority_list: &voc_eu_vocabularies_places_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Places Named Authority List
+    URI: http://publications.europa.eu/resource/authority/place/
+    notes: The EU Vocabularies Name Authority Lists must be used for continents, countries
+      and places that are in those lists; if a particular location is not in one of
+      the mentioned Named Authority Lists, Geonames URIsmust be used.
+  voc_eu_vocabularies_countries_named_authority_list: &voc_eu_vocabularies_countries_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Countries Named Authority List
+    URI: http://publications.europa.eu/resource/authority/country
+    notes: The EU Vocabularies Name Authority Lists must be used for continents, countries
+      and places that are in those lists; if a particular location is not in one of
+      the mentioned Named Authority Lists, Geonames URIsmust be used.
+  voc_eu_vocabularies_continents_named_authority_list: &voc_eu_vocabularies_continents_named_authority_list
+    type: vocabulary
+    vocabulary_name: EU Vocabularies Continents Named Authority List
+    URI: http://publications.europa.eu/resource/authority/continent/
+    notes: The EU Vocabularies Name Authority Lists must be used for continents, countries
+      and places that are in those lists; if a particular location is not in one of
+      the mentioned Named Authority Lists, Geonames URIsmust be used.
+  voc_adms_change_type_vocabulary: &voc_adms_change_type_vocabulary
+    type: vocabulary
+    vocabulary_name: ADMS change type vocabulary
+    URI: http://purl.org/adms/changetype/
+    notes: :created, :updated, :deleted
+  voc_adms_status_vocabulary: &voc_adms_status_vocabulary
+    type: vocabulary
+    vocabulary_name: ADMS status vocabulary
+    URI: http://purl.org/adms/status/
+    notes: The list of terms in the ADMS status vocabulary is included in the ADMS
+      specification
+  voc_adms_publisher_type_vocabulary: &voc_adms_publisher_type_vocabulary
+    type: vocabulary
+    vocabulary_name: ADMS publisher type vocabulary
+    URI: http://purl.org/adms/publishertype/
+    notes: The list of terms in the ADMS publisher type vocabulary is included in
+      the ADMS specification
+  voc_adms_licence_type_vocabulary: &voc_adms_licence_type_vocabulary
+    type: vocabulary
+    vocabulary_name: ADMS licence type vocabulary
+    URI: http://purl.org/adms/licencetype/
+    notes: The list of terms in the ADMS licence type vocabulary is included in the
+      ADMS specification
+
+
+#    _____ __        __                            __
+#   / ___// /_____ _/ /____  ____ ___  ___  ____  / /______
+#   \__ \/ __/ __ `/ __/ _ \/ __ `__ \/ _ \/ __ \/ __/ ___/
+#  ___/ / /_/ /_/ / /_/  __/ / / / / /  __/ / / / /_(__  )
+# /____/\__/\__,_/\__/\___/_/ /_/ /_/\___/_/ /_/\__/____/
+#
+
+
+statements:
+  pr_dataset: &pr_dataset
+    label: dataset
+    property: dcat:dataset
+    range: dcat:Dataset
+    description: This property links the Catalogue with a Dataset that is part of
+      the Catalogue.
+    min: 1
+    max: n
+  pr_description: &pr_description
+    label: description
+    property: dct:description
+    range: rdfs:Literal
+    description: This property contains a free-text account of the Distribution. This
+      property can be repeated for parallel language versions of the description.
+    min: 0
+    max: n
+  pr_publisher: &pr_publisher
+    label: publisher
+    property: dct:publisher
+    range: foaf:Agent
+    description: This property refers to an entity (organisation) responsible for
+      making the Dataset available.
+    min: 0
+    max: 1
+    constraints: *voc_eu_vocabularies_corporate_bodies_named_authority_list
+  pr_title: &pr_title
+    label: title
+    property: dct:title
+    range: rdfs:Literal
+    description: This property contains a name of the category scheme. May be repeated
+      for different versions of the name
+    min: 1
+    max: n
+  pr_homepage: &pr_homepage
+    label: homepage
+    property: foaf:homepage
+    range: foaf:Document
+    description: This property refers to a web page that acts as the main page for
+      the Catalogue.
+    min: 0
+    max: 1
+  pr_language: &pr_language
+    label: language
+    property: dct:language
+    range: dct:LinguisticSystem
+    description: This property refers to a language used in the Distribution. This
+      property can be repeated if the metadata is provided in multiple languages.
+    min: 0
+    max: n
+    constraints: *voc_eu_vocabularies_languages_named_authority_list
+  pr_licence: &pr_licence
+    label: licence
+    property: dct:license
+    range: dct:LicenseDocument
+    description: This property refers to the licence under which the Distribution
+      is made available.
+    min: 0
+    max: 1
+  pr_release_date: &pr_release_date
+    label: release date
+    property: dct:issued
+    range: rdfs:Literal
+    description: This property contains the date of formal issuance (e.g., publication)
+      of the Distribution.
+    min: 0
+    max: 1
+  pr_themes: &pr_themes
+    label: themes
+    property: dcat:themeTaxonomy
+    range: skos:ConceptScheme
+    description: This property refers to a knowledge organization system used to classify
+      the Catalogue's Datasets.
+    min: 0
+    max: n
+    constraints: *voc_dataset_theme_vocabulary
+  pr_update_modification_date: &pr_update_modification_date
+    label: update/ modification date
+    property: dct:modified
+    range: rdfs:Literal
+    description: This property contains the most recent date on which the Distribution
+      was changed or modified.
+    min: 0
+    max: 1
+  pr_has_part: &pr_has_part
+    label: has part
+    property: dct:hasPart
+    range: dcat:Catalog
+    description: This property refers to a related Catalogue that is part of the described
+      Catalogue
+    min: 0
+    max: n
+  pr_is_part_of: &pr_is_part_of
+    label: is part of
+    property: dct:isPartOf
+    range: dcat:Catalog
+    description: This property refers to a related Catalogue in which the described
+      Catalogue is physically or logically included.
+    min: 0
+    max: 1
+  pr_record: &pr_record
+    label: record
+    property: dcat:record
+    range: dcat:CatalogRecord
+    description: This property refers to a Catalogue Record that is part of the Catalogue
+    min: 0
+    max: n
+  pr_rights: &pr_rights
+    label: rights
+    property: dct:rights
+    range: dct:RightsStatement
+    description: This property refers to a statement that specifies rights associated
+      with the Distribution.
+    min: 0
+    max: 1
+  pr_spatial_geographic: &pr_spatial_geographic
+    label: spatial / geographic
+    property: dct:spatial
+    range: dct:Location
+    description: This property refers to a geographical area covered by the Catalogue.
+    min: 0
+    max: n
+  pr_primary_topic: &pr_primary_topic
+    label: primary topic
+    property: foaf:primaryTopic
+    range: dcat:Dataset
+    description: This property links the Catalogue Record to the Dataset described
+      in the record.
+    min: 1
+    max: 1
+  pr_application_profile: &pr_application_profile
+    label: application profile
+    property: dct:conformsTo
+    range: rdfs:Resource
+    description: This property refers to an Application Profile that the Dataset’s
+      metadata conforms to
+    min: 0
+    max: 1
+  pr_change_type: &pr_change_type
+    label: change type
+    property: adms:status
+    range: skos:Concept
+    description: This property refers to the type of the latest revision of a Dataset's
+      entry in the Catalogue. It MUST take one of the values :created, :updated or
+      :deleted depending on whether this latest revision is a result of a creation,
+      update or deletion.
+    min: 0
+    max: 1
+  pr_listing_date: &pr_listing_date
+    label: listing date
+    property: dct:issued
+    range: rdfs:Literal
+    description: This property contains the date on which the description of the Dataset
+      was included in the Catalogue.
+    min: 0
+    max: 1
+  pr_source_metadata: &pr_source_metadata
+    label: source metadata
+    property: dct:source
+    range: dcat:CatalogRecord
+    description: This property refers to the original metadata that was used in creating
+      metadata for the Dataset
+    min: 0
+    max: 1
+  pr_contact_point: &pr_contact_point
+    label: contact point
+    property: dcat:contactPoint
+    range: vcard:Kind
+    description: This property contains contact information that can be used for sending
+      comments about the Dataset.
+    min: 0
+    max: n
+  pr_dataset_distribution: &pr_dataset_distribution
+    label: dataset distribution
+    property: dcat:distribution
+    range: dcat:Distribution
+    description: This property links the Dataset to an available Distribution.
+    min: 0
+    max: n
+  pr_keyword_tag: &pr_keyword_tag
+    label: keyword/ tag
+    property: dcat:keyword
+    range: rdfs:Literal
+    description: This property contains a keyword or tag describing the Dataset.
+    min: 0
+    max: n
+  pr_theme_category: &pr_theme_category
+    label: theme/ category
+    property: dcat:theme
+    range: skos:Concept
+    description: This property refers to a category of the Dataset. A Dataset may
+      be associated with multiple themes.
+    min: 0
+    max: n
+    constraints: *voc_dataset_theme_vocabulary
+  pr_access_rights: &pr_access_rights
+    label: access rights
+    property: dct:accessRights
+    range: dct:RightsStatement
+    description: This property refers to information that indicates whether the Dataset
+      is open data, has access restrictions or is not public. A controlled vocabulary
+      with three members (:public, :restricted, :non-public) will be created and maintained
+      by the Publications Office of the EU.
+    min: 0
+    max: 1
+  pr_conforms_to: &pr_conforms_to
+    label: conforms to
+    property: dct:conformsTo
+    range: dct:Standard
+    description: This property refers to an implementing rule or other specification.
+    min: 0
+    max: n
+  pr_documentation: &pr_documentation
+    label: documentation
+    property: foaf:page
+    range: foaf:Document
+    description: This property refers to a page or document about this Distribution.
+    min: 0
+    max: n
+  pr_frequency: &pr_frequency
+    label: frequency
+    property: dct:accrualPeriodicity
+    range: dct:Frequency
+    description: This property refers to the frequency at which the Dataset is updated.
+    min: 0
+    max: 1
+    constraints: *voc_eu_vocabularies_frequency_named_authority_list
+  pr_has_version: &pr_has_version
+    label: has version
+    property: dct:hasVersion
+    range: dcat:Dataset
+    description: This property refers to a related Dataset that is a version, edition,
+      or adaptation of the described Dataset.
+    min: 0
+    max: n
+  pr_identifier: &pr_identifier
+    label: identifier
+    property: dct:identifier
+    range: rdfs:Literal
+    description: This property contains the main identifier for the Dataset, e.g.
+      the URI or other unique identifier in the context of the Catalogue.
+    min: 0
+    max: n
+  pr_is_version_of: &pr_is_version_of
+    label: is version of
+    property: dct:isVersionOf
+    range: dcat:Dataset
+    description: This property refers to a related Dataset of which the described
+      Dataset is a version, edition, or adaptation.
+    min: 0
+    max: n
+  pr_landing_page: &pr_landing_page
+    label: landing page
+    property: dcat:landingPage
+    range: foaf:Document
+    description: This property refers to a web page that provides access to the Dataset,
+      its Distributions and/or additional information. It is intended to point to
+      a landing page at the original data provider, not to a page on a site of a third
+      party, such as an aggregator.
+    min: 0
+    max: n
+  pr_other_identifier: &pr_other_identifier
+    label: other identifier
+    property: adms:identifier
+    range: adms:Identifier
+    description: This property refers to a secondary identifier of the Dataset, such
+      as MAST/ADS[1], DataCite[2], DOI[3], EZID[4] or W3ID[5].
+    min: 0
+    max: n
+  pr_provenance: &pr_provenance
+    label: provenance
+    property: dct:provenance
+    range: dct:ProvenanceStatement
+    description: This property contains a statement about the lineage of a Dataset.
+    min: 0
+    max: n
+  pr_related_resource: &pr_related_resource
+    label: related resource
+    property: dct:relation
+    range: rdfs:Resource
+    description: This property refers to a related resource.
+    min: 0
+    max: n
+  pr_sample: &pr_sample
+    label: sample
+    property: adms:sample
+    range: dcat:Distribution
+    description: This property refers to a sample distribution of the dataset
+    min: 0
+    max: n
+  pr_source: &pr_source
+    label: source
+    property: dct:source
+    range: dcat:Dataset
+    description: This property refers to a related Dataset from which the described
+      Dataset is derived.
+    min: 0
+    max: n
+  pr_spatial_geographical_coverage: &pr_spatial_geographical_coverage
+    label: spatial/ geographical coverage
+    property: dct:spatial
+    range: dct:Location
+    description: This property refers to a geographic region that is covered by the
+      Dataset.
+    min: 0
+    max: n
+    constraints: 
+      << : *voc_eu_vocabularies_continents_named_authority_list
+      URI: hdhakjsdkjhas
+  pr_temporal_coverage: &pr_temporal_coverage
+    label: temporal coverage
+    property: dct:temporal
+    range: dct:PeriodOfTime
+    description: This property refers to a temporal period that the Dataset covers.
+    min: 0
+    max: n
+  pr_type: &pr_type
+    label: type
+    property: dct:type
+    range: skos:Concept
+    description: This property refers to a type of the agent that makes the Catalogue
+      or Dataset available
+    min: 0
+    max: 1
+  pr_version: &pr_version
+    label: version
+    property: owl:versionInfo
+    range: rdfs:Literal
+    description: This property contains a version number or other version designation
+      of the Dataset.
+    min: 0
+    max: 1
+  pr_version_notes: &pr_version_notes
+    label: version notes
+    property: adms:versionNotes
+    range: rdfs:Literal
+    description: This property contains a description of the differences between this
+      version and a previous version of the Dataset. This property can be repeated
+      for parallel language versions of the version notes.
+    min: 0
+    max: n
+  pr_access_url: &pr_access_url
+    label: access URL
+    property: dcat:accessURL
+    range: rdfs:Resource
+    description: This property contains a URL that gives access to a Distribution
+      of the Dataset. The resource at the access URL may contain information about
+      how to get the Dataset.
+    min: 1
+    max: n
+  pr_format: &pr_format
+    label: format
+    property: dct:format
+    range: dct:MediaTypeOrExtent
+    description: This property refers to the file format of the Distribution.
+    min: 0
+    max: 1
+    constraints: *voc_eu_vocabularies_file_type_named_authority_list
+  pr_byte_size: &pr_byte_size
+    label: byte size
+    property: dcat:byteSize
+    range: rdfs:Literal
+    description: This property contains the size of a Distribution in bytes.
+    min: 0
+    max: 1
+  pr_checksum: &pr_checksum
+    label: checksum
+    property: spdx:checksum
+    range: spdx:Checksum
+    description: This property provides a mechanism that can be used to verify that
+      the contents of a distribution have not changed
+    min: 0
+    max: 1
+  pr_download_url: &pr_download_url
+    label: download URL
+    property: dcat:downloadURL
+    range: rdfs:Resource
+    description: This property contains a URL that is a direct link to a downloadable
+      file in a given format.
+    min: 0
+    max: n
+  pr_linked_schemas: &pr_linked_schemas
+    label: linked schemas
+    property: dct:conformsTo
+    range: dct:Standard
+    description: This property refers to an established schema to which the described
+      Distribution conforms.
+    min: 0
+    max: n
+  pr_media_type: &pr_media_type
+    label: media type
+    property: dcat:mediaType
+    range: dct:MediaTypeOrExtent
+    description: This property refers to the media type of the Distribution as defined
+      in the official register of media types managed by IANA.
+    min: 0
+    max: 1
+    constraints: *voc_iana_media_types
+  pr_status: &pr_status
+    label: status
+    property: adms:status
+    range: skos:Concept
+    description: This property refers to the maturity of the Distribution
+    min: 0
+    max: 1
+    constraints: *voc_adms_status_vocabulary
+  pr_name: &pr_name
+    label: name
+    property: foaf:name
+    range: rdfs:Literal
+    description: This property contains a name of the agent. This property can be
+      repeated for different versions of the name (e.g. the name in different languages)
+    min: 1
+    max: n
+  pr_preferred_label: &pr_preferred_label
+    label: preferred label
+    property: skos:prefLabel
+    range: rdfs:Literal
+    description: This property contains a preferred label of the category. This property
+      can be repeated for parallel language versions of the label.
+    min: 1
+    max: n
+  pr_algorithm: &pr_algorithm
+    label: algorithm
+    property: spdx:algorithm
+    range: spdx:checksumAlgorithm_sha1
+    description: This property identifies the algorithm used to produce the subject
+      Checksum. Currently, SHA-1 is the only supported algorithm. It is anticipated
+      that other algorithms will be supported at a later time.
+    min: 1
+    max: 1
+  pr_checksum_value: &pr_checksum_value
+    label: checksum value
+    property: spdx:checksumValue
+    range: rdfs:Literal
+    description: This property provides a lower case hexadecimal encoded digest value
+      produced using a specific algorithm.
+    min: 1
+    max: 1
+  pr_notation: &pr_notation
+    label: notation
+    property: skos:notation
+    range: rdfs:Literal
+    description: This property contains a string that is an identifier in the context
+      of the identifier scheme referenced by its datatype.
+    min: 0
+    max: 1
+  pr_licence_type: &pr_licence_type
+    label: licence type
+    property: dct:type
+    range: skos:Concept
+    description: This property refers to a type of licence, e.g. indicating ‘public
+      domain’ or ‘royalties required’.
+    min: 0
+    max: n
+    constraints: *voc_adms_licence_type_vocabulary
+  pr_start_date_time: &pr_start_date_time
+    label: start date/time
+    property: schema:startDate
+    range: rdfs:Literal
+    description: This property contains the start of the period
+    min: 0
+    max: 1
+  pr_end_date_time: &pr_end_date_time
+    label: end date/time
+    property: schema:endDate
+    range: rdfs:Literal
+    description: This property contains the end of the period
+    min: 0
+    max: 1
+
+#   ________    ___   __________ ___________
+#  / ____/ /   /   | / ___/ ___// ____/ ___/
+# / /   / /   / /| | \__ \\__ \/ __/  \__ \
+#/ /___/ /___/ ___ |___/ /__/ / /___ ___/ /
+#\____/_____/_/  |_/____/____/_____//____/
+#
+
+classes:
+  cl_agent: &cl_agent
+    label: Agent
+    property: foaf:Agent
+    requirement: mandatory
+    reference: http://xmlns.com/foaf/spec/#term_Agent http://www.w3.org/TR/vocab-org/
+    notes: An entity that is associated with Catalogues and/or Datasets. If the Agent
+      is an organisation, the use of the Organization Ontology  is recommended. See
+      section 7 for a discussion on Agent roles.
+    mandatory_properties:
+      - *pr_name
+    recommended_properties:
+      - *pr_licence_type
+  cl_catalogue: &cl_catalogue
+    label: Catalogue
+    property: dcat:Catalog
+    requirement: mandatory
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-catalog
+    notes: A catalogue or repository that hosts the Datasets being described.
+    mandatory_properties:
+      - *pr_dataset
+      - *pr_description
+      - *pr_publisher
+      - *pr_title
+    recommended_properties:
+      - *pr_homepage
+      - *pr_language
+      - *pr_licence
+      - *pr_listing_date
+      - *pr_themes
+      - *pr_update_modification_date
+    optional_properties:
+      - *pr_has_part
+      - *pr_is_part_of
+      - *pr_record
+      - *pr_rights
+      - *pr_spatial_geographical_coverage
+  cl_dataset: &cl_dataset
+    label: Dataset
+    property: dcat:Dataset
+    requirement: mandatory
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-dataset
+    notes: A conceptual entity that represents the information published.
+    mandatory_properties:
+      - *pr_description
+      - *pr_title
+    recommended_properties:
+      - *pr_contact_point
+      - *pr_dataset_distribution
+      - *pr_keyword_tag
+      - *pr_publisher
+      - *pr_theme_category
+    optional_properties:
+      - *pr_other_identifier
+      - *pr_sample
+      - *pr_version_notes
+      - *pr_landing_page
+      - *pr_access_rights
+      - *pr_frequency
+      - *pr_linked_schemas
+      - *pr_has_version
+      - *pr_is_version_of
+      - *pr_identifier
+      - *pr_listing_date
+      - *pr_language
+      - *pr_update_modification_date
+      - *pr_provenance
+      - *pr_related_resource
+      - *pr_source
+      - *pr_spatial_geographical_coverage
+      - *pr_temporal_coverage
+      - *pr_licence_type
+      - *pr_documentation
+      - *pr_version
+  cl_literal: &cl_literal
+    label: Literal
+    property: rdfs:Literal
+    requirement: mandatory
+    reference: http://www.w3.org/TR/rdf-concepts/#section-Literals
+    notes: A literal value such as a string or integer; Literals may be typed, e.g.
+      as a date according to xsd:date. Literals that contain human-readable text have
+      an optional language tag as defined by BCP 47 .
+  cl_resource: &cl_resource
+    label: Resource
+    property: rdfs:Resource
+    requirement: mandatory
+    reference: http://www.w3.org/TR/rdf-schema/#ch_resource
+    notes: Anything described by RDF.
+  cl_category: &cl_category
+    label: Category
+    property: skos:Concept
+    requirement: recommended
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-category-and-category-scheme
+    notes: A subject of a Dataset.
+    mandatory_properties:
+      - *pr_preferred_label
+  cl_category_scheme: &cl_category_scheme
+    label: Category scheme
+    property: skos:ConceptScheme
+    requirement: recommended
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-category-and-category-scheme
+    notes: A concept collection (e.g. controlled vocabulary) in which the Category
+      is defined.
+    mandatory_properties:
+      - *pr_title
+  cl_distribution: &cl_distribution
+    label: Distribution
+    property: dcat:Distribution
+    requirement: recommended
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-distribution
+    notes: A physical embodiment of the Dataset in a particular format.
+    mandatory_properties:
+      - *pr_access_url
+    recommended_properties:
+      - *pr_description
+      - *pr_format
+      - *pr_licence
+    optional_properties:
+      - *pr_status
+      - *pr_byte_size
+      - *pr_download_url
+      - *pr_media_type
+      - *pr_linked_schemas
+      - *pr_listing_date
+      - *pr_language
+      - *pr_update_modification_date
+      - *pr_rights
+      - *pr_title
+      - *pr_documentation
+      - *pr_checksum
+  cl_licence_document: &cl_licence_document
+    label: Licence document
+    property: dct:LicenseDocument
+    requirement: recommended
+    reference: http://dublincore.org/documents/2012/06/14/dcmi-terms/?v=terms#LicenseDocument
+    notes: A legal document giving official permission to do something with a resource.
+    recommended_properties:
+      - *pr_licence_type
+  cl_catalogue_record: &cl_catalogue_record
+    label: Catalogue Record
+    property: dcat:CatalogRecord
+    requirement: optional
+    reference: http://www.w3.org/TR/2013/WD-vocab-dcat-20130312/#class-catalog-record
+    notes: A description of a Dataset’s entry in the Catalogue.
+    mandatory_properties:
+      - *pr_update_modification_date
+      - *pr_primary_topic
+    recommended_properties:
+      - *pr_linked_schemas
+      - *pr_status
+      - *pr_listing_date
+    optional_properties:
+      - *pr_description
+      - *pr_language
+      - *pr_source
+      - *pr_title
+  cl_checksum: &cl_checksum
+    label: Checksum
+    property: spdx:Checksum
+    requirement: optional
+    reference: http://spdx.org/rdf/terms#Checksum
+    notes: A value that allows the contents of a file to be authenticated. This class
+      allows the results of a variety of checksum and cryptographic message digest
+      algorithms to be represented.
+    mandatory_properties:
+      - *pr_algorithm
+      - *pr_checksum_value
+  cl_document: &cl_document
+    label: Document
+    property: foaf:Document
+    requirement: optional
+    reference: http://xmlns.com/foaf/spec/#term_Document
+    notes: A textual resource intended for human consumption that contains information,
+      e.g. a web page about a Dataset.
+  cl_frequency: &cl_frequency
+    label: Frequency
+    property: dct:Frequency
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-Frequency
+    notes: A rate at which something recurs, e.g. the publication of a Dataset.
+  cl_identifier: &cl_identifier
+    label: Identifier
+    property: adms:Identifier
+    requirement: optional
+    reference: http://www.w3.org/TR/vocab-adms/#identifier
+    notes: An identifier in a particular context, consisting of the string that is
+      the identifier; an optional identifier for the identifier scheme; an optional
+      identifier for the version of the identifier scheme; an optional identifier
+      for the agency that manages the identifier scheme
+    mandatory_properties:
+      - *pr_notation
+  cl_kind: &cl_kind
+    label: Kind
+    property: vcard:Kind
+    requirement: optional
+    reference: http://www.w3.org/TR/2014/NOTE-vcard-rdf-20140522/#d4e181
+    notes: A description following the vCard specification, e.g. to provide telephone
+      number and e-mail address for a contact point. Note that the class Kind is the
+      parent class for the four explicit types of vCards (Individual, Organization,
+      Location, Group).
+  cl_linguistic_system: &cl_linguistic_system
+    label: Linguistic system
+    property: dct:LinguisticSystem
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-LinguisticSystem
+    notes: A system of signs, symbols, sounds, gestures, or rules used in communication,
+      e.g. a language
+  cl_location: &cl_location
+    label: Location
+    property: dct:Location
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-Location
+    notes: A spatial region or named place. It can be represented using a controlled
+      vocabulary or with geographic coordinates. In the latter case, the use of the
+      Core Location Vocabulary  is recommended, following the approach described in
+      the GeoDCAT-AP specification.
+  cl_media_type_or_extent: &cl_media_type_or_extent
+    label: Media type or extent
+    property: dct:MediaTypeOrExtent
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-MediaTypeOrExtent
+    notes: A media type or extent, e.g. the format of a computer file
+  cl_period_of_time: &cl_period_of_time
+    label: Period of time
+    property: dct:PeriodOfTime
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-PeriodOfTime
+    notes: An interval of time that is named or defined by its start and end dates.
+    optional_properties:
+      - *pr_start_date_time
+      - *pr_end_date_time
+  cl_publisher_type: &cl_publisher_type
+    label: Publisher type
+    property: skos:Concept
+    requirement: optional
+    reference: http://www.w3.org/TR/vocab-adms/#dcterms-type
+    notes: A type of organisation that acts as a publisher
+  cl_rights_statement: &cl_rights_statement
+    label: Rights statement
+    property: dct:RightsStatement
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-RightsStatement
+    notes: A statement about the intellectual property rights (IPR) held in or over
+      a resource, a legal document giving official permission to do something with
+      a resource, or a statement about access rights.
+  cl_standard: &cl_standard
+    label: Standard
+    property: dct:Standard
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-Standard
+    notes: A standard or other specification to which a Dataset or Distribution conforms
+  cl_status: &cl_status
+    label: Status
+    property: skos:Concept
+    requirement: optional
+    reference: http://www.w3.org/TR/vocab-adms/#status
+    notes: An indication of the maturity of a Distribution or the type of change of
+      a Catalogue Record.
+  cl_provenance_statement: &cl_provenance_statement
+    label: Provenance Statement
+    property: dct:ProvenanceStatement
+    requirement: optional
+    reference: http://dublincore.org/documents/dcmi-terms/#terms-ProvenanceStatement
+    notes: A statement of any changes in ownership and custody of a resource since
+      its creation that are significant for its authenticity, integrity, and interpretation
+
+
+#    ________                          _____      __
+#   / ____/ /_  ____ _____  ____ ____ / ___/___  / /______
+#  / /   / __ \/ __ `/ __ \/ __ `/ _ \\__ \/ _ \/ __/ ___/
+# / /___/ / / / /_/ / / / / /_/ /  __/__/ /  __/ /_(__  )
+# \____/_/ /_/\__,_/_/ /_/\__, /\___/____/\___/\__/____/
+#                        /____/
+
+
